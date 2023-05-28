@@ -196,7 +196,23 @@ class Zerodha(Broker):
         Return only the positions for the day
         """
         position_book = self.kite.positions().get("day")
-        position_book = deepcopy(position_book)
+        if position_book:
+            for position in position_book:
+                if position["quantity"] > 0:
+                    position["side"] = "BUY"
+                else:
+                    position["side"] = "SELL"
+            return position_book
+        else:
+            return [{}]
+
+    @property
+    @post
+    def net_positions(self) -> List[Dict]:
+        """
+        Return only the positions for the day
+        """
+        position_book = self.kite.positions().get("net")
         if position_book:
             for position in position_book:
                 if position["quantity"] > 0:
@@ -266,5 +282,3 @@ class Zerodha(Broker):
 
     def ltp(self, exchsym):
         return self.kite.ltp(exchsym)
-
-
