@@ -2,7 +2,6 @@ from typing import Callable, Optional, List, Dict, Tuple, Union
 import inspect
 import yaml
 import logging
-from copy import deepcopy
 from omspy.utils import *
 import omspy.models as models
 
@@ -74,6 +73,7 @@ class Broker:
         }
         file_path = inspect.getfile(self.__class__)[:-3]
         override_file = kwargs.pop("override_file", f"{file_path}.yaml")
+        print(f"looking up {override_file}")
         try:
             with open(override_file, "r") as f:
                 dct = yaml.safe_load(f)
@@ -217,7 +217,7 @@ class Broker:
         if callable(symbol_transformer):
             func = symbol_transformer
         else:
-            func = lambda x: x  # just return the symbol
+            def func(x): return x  # just return the symbol
 
         if positions is None:
             positions = self.positions
@@ -315,7 +315,8 @@ class Broker:
         non_matched = [p for p in positions.values() if p.net_quantity != 0]
         for pos in non_matched:
             if pos.net_quantity > 0:
-                stop_loss_price = stop_function(side="buy", price=pos.average_buy_value)
+                stop_loss_price = stop_function(
+                    side="buy", price=pos.average_buy_value)
                 # TODO: Generalize side with enum since the
                 # present implementation caters to a single broker
                 self.order_place(
