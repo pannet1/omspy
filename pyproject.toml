@@ -4,6 +4,7 @@ version = "0.11.0"
 description = ""
 authors = ["darkseid <uberdeveloper001@gmail.com>"]
 readme = "README.md"
+packages = [{include = "omspy"}]
 repository = "https://github.com/pannet1/omspy"
 
 [tool.poetry.dependencies]
