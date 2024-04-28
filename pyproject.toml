@@ -8,4 +8,5 @@ version = "0.11.0"
 description = ""
 authors = ["darkseid <uberdeveloper001@gmail.com>"]
 readme = "README.md"
+packages = [{include = "omspy"}]
 
